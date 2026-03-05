@@ -1,8 +1,9 @@
-import "./styles.css";
+import "./styles.css"
 import React, { useState } from "react";
 import axios from "axios";
 
-export default function Form() {
+
+export  const StudentRegisterForm = ()=>{
   const [values, setValues] = useState({
     username: "",
     password: "",
