@@ -1,11 +1,13 @@
+import "./styles.css"
+import React, { useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 
-export const LoginPage = () => {
-  // useState for User object
-  const [user, setUser] = useState({
+
+export  const RegisterPage = ()=>{
+  const [values, setValues] = useState({
     username: "",
     password: "",
+    role: "",
   });
 
   const handleInputChange = (event) => {
@@ -13,58 +15,35 @@ export const LoginPage = () => {
     event.preventDefault();
 
     const { name, value } = event.target;
-
-    setUser((user) => ({
-      ...user,
+    debugger;
+    setValues((values) => ({
+      ...values,
       [name]: value,
     }));
   };
-  // function to handle submit
-  const URL = "http://localhost:8080";
 
-  const handleSubmit = async () => {
-    const respone = await fetch("http://localhost:8080/users/verify", {
-      method: "get",
-      headers: new Headers({
-        Authorization: "Basic " + btoa("Barny:password"),
-        "Content-Type": "application/x-www-form-urlencoded",
-      })
-    }).then(res=>{
-      console.log(res)
-    });
-
-
-  };
-  // const handleSubmit = () => {
-  //   axios
-  //     .get(URL + "/users/verify", {
-  //       auth: {
-  //         Username: user.username,
-  //         Passoword: user.password,
-  //       },
-  //     })
-  //     .then(function (response) {
-  //       debugger
-  //       console.log(response);
-  //       if (response.status == 200) {
-  //         alert("Success!");
-  //       } else {
-  //         alert("Wrong Credentials!");
-  //       }
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // };
   const [submitted, setSubmitted] = useState(false);
   const [valid, setValid] = useState(false);
+
+  const URL="http://localhost:8080";
+  const handleSubmit = () => {
+    axios
+      .post(URL+"/users/save", values)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
 
   return (
     <div className="form-container">
       <form className="register-form" onSubmit={handleSubmit}>
         <div class="formbold-form-title">
-          <h2 class="">Login now</h2>
-          <p>Please enter your username and password to Login</p>
+          <h2 class="">Register now</h2>
+          <p>Please enter your username and password to register</p>
         </div>
 
         <div class="formbold-input-flex">
@@ -78,7 +57,7 @@ export const LoginPage = () => {
               name="username"
               id="username"
               class="formbold-form-input"
-              value={user.username}
+              value={values.username}
               onChange={handleInputChange}
             />
           </div>
@@ -92,16 +71,31 @@ export const LoginPage = () => {
               name="password"
               id="password"
               class="formbold-form-input"
-              value={user.password}
+              value={values.password}
               onChange={handleInputChange}
             />
           </div>
         </div>
+        <div class="form-group">
+          <label for="purpose" class="form-label">
+            Select Student
+          </label>
+          <select
+            name="role"
+            id="role"
+            class="form-select"
+            onChange={handleInputChange}
+          >
+            <option value="">-- Select --</option>
+            <option value="admin">Admin</option>
+            <option value="student">Student</option>
+          </select>
+        </div>
 
         <button class="formbold-btn" type="button" onClick={handleSubmit}>
-          Submit
+          Register Now
         </button>
       </form>
     </div>
   );
-};
+}

@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +28,9 @@ public class UsersService {
     private AssignmentRepository assignmentRepository;
     @Autowired
     private LessonsRepository lessonsRepository;
+
+    @Autowired
+    public AuthenticationManager authManager;
 
     public List<Users> getAllUsers() {
         List<Users> users = new ArrayList<>();
@@ -87,19 +93,13 @@ public class UsersService {
         return "OK";
     }
 
-    public String verifyUser(Users user) {
-
-        user.setPassword(user.getPassword());
-        System.out.println(user.getPassword());
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
-        List<Users> existing = getUsersByName(user.getUsername());        
-        
-
-        return  passwordEncoder.matches(user.getPassword(), existing.getFirst().getPassword()) ? "OK" : "Error";
+    public boolean verifyUser(Users user) {
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+        return authentication.isAuthenticated();
     }
 
     // For Lessons table
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<Lessons> getAllLessons() {
         List<Lessons> lessons = new ArrayList<>();
@@ -154,6 +154,11 @@ public class UsersService {
     public List<Assignment> getAllAssignments() {
         List<Assignment> trackers = new ArrayList<>();
         Streamable.of(assignmentRepository.findAll()).forEach(trackers::add);
+        return trackers;
+    }
+
+    public List<Assignment> getAssignmentsByUser(int userID) {
+        List<Assignment> trackers = assignmentRepository.findByUserID(userID);
         return trackers;
     }
 

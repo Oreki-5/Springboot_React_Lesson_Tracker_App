@@ -38,7 +38,7 @@ Admin Dashboard
 - admin should be able to sort the list based on username
 
 
-Login page should contain
+*Login page should contain*
 - simple username password textbox
 - validation for wrong password
 - success page after login successful
@@ -49,9 +49,43 @@ Register page should contain
 - additional dropdown box with roles, only visible to admin role
 
 
-Dashboard details
+*Dashboard details*
 - must have a table list of assignment record
 - admin should be able to see an "add button" for lesson and assignemnt on the top
 - each assignment link will redirect to its details page
 - user should be able to see only the assignments assigned to them
 - admin should be able to see all the assignement records
+
+- admin should be able to see two tabs on the top namely - "Users" and "Lessons"
+
+
+
+
+*Users List Page:*
+- should show all users in a tabular format
+- [Vailidation] if a user record is deleted, all the assignment records of that user should be deleted
+- admin role should see an add button to add user, redirects to registeration page
+- no role is allowed to update any user record
+- admin role is allowed to delete any record
+
+
+
+*Users Add Page*
+- It is the registeration page
+
+*Lessons List Page:*
+- should show list of all lessons in table
+- [Validation] a lesson should NOT be allowed to be deleted if the lesson is used for an assignment record.
+- option to add or update lessons for admin role only
+
+
+*Lesson Add/Update Page*
+- should have textbox for lesson title and url of file
+- submit button to submit
+- only admin role is allowed to see this page
+
+
+
+
+
+

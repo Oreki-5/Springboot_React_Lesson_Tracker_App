@@ -1,5 +1,7 @@
 package com.Oreki.Lesson_Tracker.Models;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,13 @@ public class Assignment {
     // radio
     @Column(name = "status")
     private String status;
+
+
+    // int
+    @Column(name = "score")
+    @ColumnDefault("0")
+    private int score;
+
 
     // text area
     @Column(name = "feedback")
@@ -77,6 +86,14 @@ public class Assignment {
 
     public void setAudioURL(String audioURL) {
         this.audioURL = audioURL;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
 }

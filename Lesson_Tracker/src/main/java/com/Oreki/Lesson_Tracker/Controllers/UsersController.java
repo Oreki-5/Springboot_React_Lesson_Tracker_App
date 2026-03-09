@@ -2,7 +2,6 @@ package com.Oreki.Lesson_Tracker.Controllers;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ import com.Oreki.Lesson_Tracker.Service.UsersService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/users")
 public class UsersController {
@@ -32,7 +31,8 @@ public class UsersController {
         return usersService.getAllUsers();
     }
 
-    // Made the return statement a switch statement to easily add any new case for response later
+    // Made the return statement a switch statement to easily add any new case for
+    // response later
     @PostMapping("/save")
     public ResponseEntity<String> saveUsers(@RequestBody Users user) {
         String response = usersService.saveUser(user);
@@ -53,18 +53,20 @@ public class UsersController {
     }
 
     @GetMapping("/csrf")
-    public CsrfToken getCsrfToken(HttpServletRequest request){
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
         return (CsrfToken) request.getAttribute("_csrf");
 
     }
 
     @PostMapping("/verify")
     public ResponseEntity<String> verifyUser(@RequestBody Users user) {
-        String response = usersService.verifyUser(user);
-        return switch (response) {
-            case "OK" -> new ResponseEntity<>("User Updated Successfully", HttpStatus.OK);
-            default -> new ResponseEntity<>("Somthing Failed", HttpStatus.BAD_REQUEST);
-        };
+
+        if (usersService.verifyUser(user)) {
+            return new ResponseEntity<>("Login Verified", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Somthing Failed", HttpStatus.BAD_REQUEST);
+        }
+
     }
 
 }

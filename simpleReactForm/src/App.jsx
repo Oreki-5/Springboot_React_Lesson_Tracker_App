@@ -1,22 +1,20 @@
 import "./App.css";
-import { RouteManager } from "./RouteManager";
 import Navbar from "./Components/Navbar";
 import { Route, Routes } from "react-router-dom";
-import { StudentRegisterForm } from "./AdminPages/StudentRegisterForm";
-import { AllLessonListingPage } from "./AdminPages/AllLessonListingPage";
-import { AllAssignmentListingPage } from "./AdminPages/AllAssignmentListingPage";
+import { RegisterPage } from "./CommonPages/RegisterPage";
+import { LoginPage } from "./CommonPages/LoginPage";
+import DashboardPage from "./CommonPages/DashboardPage";
+import UserListPage from "./AdminPages/UserListPage/UserListPage";
 
 function App() {
   return (
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<StudentRegisterForm />} />
-        <Route path="/admin/lessons" element={<AllLessonListingPage />} />
-        <Route
-          path="/admin/assignment"
-          element={<AllAssignmentListingPage />}
-        />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/list" element={<UserListPage />} />
       </Routes>
     </>
   );
