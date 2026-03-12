@@ -31,18 +31,7 @@ public class UsersController {
         return usersService.getAllUsers();
     }
 
-    // Made the return statement a switch statement to easily add any new case for
-    // response later
-    @PostMapping("/save")
-    public ResponseEntity<String> saveUsers(@RequestBody Users user) {
-        String response = usersService.saveUser(user);
-        return switch (response) {
-            case "OK" -> new ResponseEntity<>("User Updated Successfully", HttpStatus.OK);
-            case "Duplicate" -> new ResponseEntity<>("Duplicate Reccord", HttpStatus.CONFLICT);
-            default -> new ResponseEntity<>("Somthing Failed", HttpStatus.BAD_REQUEST);
-        };
-    }
-
+    
     @PostMapping("/update")
     public ResponseEntity<String> updateUsers(@RequestBody Users user) {
         String response = usersService.updateUser(user);
@@ -58,15 +47,5 @@ public class UsersController {
 
     }
 
-    @PostMapping("/verify")
-    public ResponseEntity<String> verifyUser(@RequestBody Users user) {
-
-        if (usersService.verifyUser(user)) {
-            return new ResponseEntity<>("Login Verified", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Somthing Failed", HttpStatus.BAD_REQUEST);
-        }
-
-    }
-
+    
 }

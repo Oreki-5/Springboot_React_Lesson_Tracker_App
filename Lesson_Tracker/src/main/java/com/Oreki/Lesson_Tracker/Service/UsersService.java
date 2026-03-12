@@ -1,5 +1,6 @@
 package com.Oreki.Lesson_Tracker.Service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Oreki.Lesson_Tracker.Models.Assignment;
@@ -31,6 +30,9 @@ public class UsersService {
 
     @Autowired
     public AuthenticationManager authManager;
+
+    @Autowired
+    public JWTService jwtService;
 
     public List<Users> getAllUsers() {
         List<Users> users = new ArrayList<>();
@@ -93,9 +95,20 @@ public class UsersService {
         return "OK";
     }
 
-    public boolean verifyUser(Users user) {
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
-        return authentication.isAuthenticated();
+    public String verifyUser(Users user) {
+        Authentication authentication = authManager
+                .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+
+        if (authentication.isAuthenticated()) {
+            try {
+                return jwtService.generateToken(user.getUsername());
+            } catch (NoSuchAlgorithmException ex) {
+                System.getLogger(UsersService.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+            return "Service error";
+        } else {
+            return "Failed";
+        }
     }
 
     // For Lessons table

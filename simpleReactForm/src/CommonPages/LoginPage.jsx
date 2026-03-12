@@ -22,18 +22,17 @@ export const LoginPage = () => {
   // function to handle submit
   const URL = "http://localhost:8080";
 
-  const handleSubmit = async () => {
-    const respone = await fetch("http://localhost:8080/users/verify", {
-      method: "get",
-      headers: new Headers({
-        Authorization: "Basic " + btoa("Barny:password"),
-        "Content-Type": "application/x-www-form-urlencoded",
+  const handleSubmit = () => {
+    axios
+      .post(URL + "/users/verify", user)
+      .then(function (response) {
+        console.log(response);
+        if(response.status==200) alert("Login Successful!")
+        else alert("Error!");
       })
-    }).then(res=>{
-      console.log(res)
-    });
-
-
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   // const handleSubmit = () => {
   //   axios

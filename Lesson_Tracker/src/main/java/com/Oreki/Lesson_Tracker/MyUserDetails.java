@@ -10,11 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.Oreki.Lesson_Tracker.Models.Users;
 
-public class UserPrincipal implements UserDetails{
+public class MyUserDetails implements UserDetails{
 
     private Users user;
 
-    public UserPrincipal(Users user){
+    public MyUserDetails(Users user){
         this.user = user;
     }
 

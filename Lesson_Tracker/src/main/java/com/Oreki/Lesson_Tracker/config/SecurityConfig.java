@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.Oreki.Lesson_Tracker.Service.MyUserDetailsService;
 
@@ -19,17 +20,23 @@ import com.Oreki.Lesson_Tracker.Service.MyUserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private JWTAuthorizationConfig jwtAuthorizationConfig;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(e -> e.disable());
         http.authorizeHttpRequests(request -> {
-            request.requestMatchers("/users/verify","/users/register").permitAll();
+            request.requestMatchers("/**/verify","/**/register","/login").permitAll();
+            request.requestMatchers("/users/**").hasRole("USER");
+            // request.requestMatchers("/admin/**").hasRole("ADMIN");
             request.anyRequest().authenticated();
 
         });
         http.formLogin(Customizer.withDefaults());
         http.httpBasic(Customizer.withDefaults());
         http.cors(c->c.disable());
+        http.addFilterBefore(jwtAuthorizationConfig, UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
     }
